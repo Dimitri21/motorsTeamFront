@@ -5,8 +5,8 @@ import { FormikStepProps } from './FormikStep';
 
 export default function FormikStepper({
 	children,
-	finalMessage,
-	finalMessageButton,
+	// finalMessage,
+	// finalMessageButton,
 	...props
 }: FormikConfig<FormikValues>) {
 	const childrenArray = React.Children.toArray(children);
