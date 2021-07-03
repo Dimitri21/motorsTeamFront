@@ -21,9 +21,9 @@ export default function FileUploader() {
 				let formData = new FormData();
 				formData.append('image', reader.result);
 				formData.append('name', 'toto');
-				
 
-			fetch('http://localhost.webo:8888/api/image/', {
+
+			fetch('http://site2.webo:8888/api/image/', {
 				method: 'POST',
 				body: formData,
 				headers: myHeaders,

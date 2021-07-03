@@ -58,14 +58,16 @@ export default function VariousForm({ vehicle, setVehicle, setStepIsValid }) {
 	}
 
 	useEffect(() => {
-		setVehicle({
-			...vehicle,
-			price: priceValue,
-			distance: distanceValue,
-			title: titleValue,
-			description: descriptionValue,
-			localisation: localisationValue,
-		});
+		return () => {
+			setVehicle({
+				...vehicle,
+				price: priceValue,
+				distance: distanceValue,
+				title: titleValue,
+				description: descriptionValue,
+				localisation: localisationValue,
+			});
+		};
 	}, [priceValue, distanceValue, titleValue, descriptionValue, localisationValue]);
 
 	return (
@@ -125,10 +127,7 @@ export default function VariousForm({ vehicle, setVehicle, setStepIsValid }) {
 				/>
 			</div>
 			<div className={classes.formControl}>
-				<VehicleStateSelect 
-					vehicleState= {vehicleState}
-					setVehicleState= {setVehicleState}
-				/>
+				<VehicleStateSelect vehicleState={vehicleState} setVehicleState={setVehicleState} />
 			</div>
 
 			<div className={classes.formControl}>

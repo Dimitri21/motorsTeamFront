@@ -69,12 +69,10 @@ export default function VehicleApiForm({ vehicle, setVehicle, setStepIsValid }) 
 		reset: resetRegistrationDate,
 	} = useInput(isNotEmpty, vehicle.registrationDate);
 
-	if (brandIsValid) {
-		setStepIsValid(true);
-	}
-
 
 	useEffect(() => {
+
+		
 		setVehicle({
 			...vehicle,
 			brand: brandValue,
@@ -85,7 +83,7 @@ export default function VehicleApiForm({ vehicle, setVehicle, setStepIsValid }) 
 			fuelType: fuelTypeValue,
 			registrationDate: registrationDateValue,
 		});
-	}, [brandValue, carModelValue, carTypeValue, gearboxValue, fuelTypeValue, registrationDateValue]);
+	}, [brandValue, carModelValue, carTypeValue, gearboxValue, fuelTypeValue, registrationDateValue, motorValue]);
 
 	return (
 		<div className={`slideAnimation`}>
