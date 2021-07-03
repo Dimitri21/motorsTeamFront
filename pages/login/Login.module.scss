@@ -1,0 +1,21 @@
+.formCard {
+  margin-top: 15vh;
+  padding: 30px;
+  border-radius: 30px;
+  max-width: 600px;
+  border: 1px solid #e7e7e7;
+  box-shadow: 2px 2px 5px #c9c9c9;
+  background-color: #fff;
+}
+
+.formControl {
+  width: 100%;
+  margin-top: 25px;
+  margin-bottom: 25px;
+}
+
+@media screen and (min-width: 900px) {
+  .formCard {
+    min-width: 600px;
+  }
+}

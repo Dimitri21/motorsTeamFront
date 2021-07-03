@@ -1,0 +1,19 @@
+
+@import './colors.scss';
+.home {
+  background-image: url('.././public/assets/img/download-shape.svg');
+  background-position: right;
+  background-repeat: no-repeat;
+
+  h1 {
+    font-size: 3.2rem;
+    font-weight: 600;
+    font-family: 'Montserrat';
+  }
+
+  .CTA1 {
+    background-color: $bg-dark;
+    height: 25vh;
+    
+  }
+}

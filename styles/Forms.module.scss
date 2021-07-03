@@ -1,0 +1,44 @@
+
+
+.formCard {
+    margin-top: 15vh;
+    padding: 30px;
+    border-radius: 30px;
+    border: 1px solid #e7e7e7;
+    box-shadow: 2px 2px 5px #c9c9c9;
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+
+    form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    h1 {
+        text-align: center;
+    }
+  }
+  
+  .formControl {
+    width: 100%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    max-width: 350px;
+  }
+
+  .formAction {
+      margin-top: 40px;
+      margin-bottom: 20px;
+      min-width: 250px;
+      max-width: 300px;
+  }
+  
+  @media screen and (min-width: 900px) {
+    .formCard {
+      min-width: 400px;
+    }
+  }
+  
