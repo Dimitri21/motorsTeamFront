@@ -18,7 +18,6 @@ export default function AddVehicleForm() {
 	const [stepPriceIsValid, setStepPriceIsValid] = useState(false);
 	const [stepPicturesIsValid, setStepPicturesIsValid] = useState(false);
 
-	console.log(stepApiIsValid, stepPriceIsValid);
 
 	// Stepper
 	const [activeStep, setActiveStep] = React.useState(0);
@@ -39,6 +38,7 @@ export default function AddVehicleForm() {
 		title: '',
 		localisation: '',
 		vehicleCondition: '',
+		images: {},
 	};
 
 	const [vehicle, setVehicle] = useState(vehicleInit);
