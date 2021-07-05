@@ -4,7 +4,6 @@ import { useState, useRef, useEffect } from 'react';
 import classes from './AddVehicleForm.module.scss';
 
 export default function FileUploader(props) {
-
 	// Set pregenerate title of ads on this step for avoiding problem with useEffect, and avoid unwanted modification when the user go back
 	useEffect(() => {
 		if (props.titleIsSet === false) {
@@ -18,7 +17,7 @@ export default function FileUploader(props) {
 	}, []);
 
 	const thumbnailHandler = (event) => {
-		uploadThumbnail(event.target.files[0], 'thumbnail');
+		uploadThumbnail(event.target.files[0]);
 	};
 
 	// function getBase64(file) {
@@ -68,19 +67,12 @@ export default function FileUploader(props) {
 				.then((response) => response.json())
 				.then((result) => {
 					console.log('Success:', result);
-					if (storage === 'thumbnail') {
-						props.setVehicle({
-							...props.vehicle,
-							thumbnail: result.src,
-						});
-						props.setThumbnailImage(result.src);
-						props.setThumbnailImageIsSet(true);
-					} else {
-						props.setVehicle({
-							...props.vehicle,
-							thumbnail: result.src,
-						});
-					}
+					props.setVehicle({
+						...props.vehicle,
+						thumbnail: result.src,
+					});
+					props.setThumbnailImage(result.src);
+					props.setThumbnailImageIsSet(true);
 				})
 				.catch((error) => {
 					console.error('Error:', error);
@@ -154,7 +146,7 @@ export default function FileUploader(props) {
 					className={classes.inputfile}
 					onChange={thumbnailHandler}
 				/>
-				<label for="thumbnail">Choisissez un fichier</label>
+				<label htmlFor="thumbnail">Choisissez un fichier</label>
 			</div>
 			<div className={classes.uploaderCard}>
 				<h3>Galerie</h3>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { Button, TextField, Paper, Grid } from '@material-ui/core';
@@ -14,7 +14,8 @@ const validationSchema = yup.object({
 });
 
 export default function Login() {
-	const { isLoading, error, sendRequest: sendLoginRequest } = useHttp();
+	const { isLoading, sendRequest: sendLoginRequest } = useHttp();
+	const [error, setError] = useState()
 
 	const formik = useFormik({
 		initialValues: {
@@ -22,19 +23,33 @@ export default function Login() {
 			password: '',
 		},
 		validationSchema: validationSchema,
-		onSubmit: (values) => {
-			console.log(values);
-			sendLoginRequest({
-				url: 'http://127.0.0.1:8888/api/login',
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: {
-					email: values.email,
-					password: values.password,
-				},
+		onSubmit: async (values) => {
+			let jsonData = JSON.stringify({
+				email: values.email,
+				password: values.password,
 			});
+
+			let formData = new FormData();
+			formData.append('_username', 'jam-jam'); // là il faut mettre le nom d'utilisateur
+			formData.append('password', 'azertyuiop*'); // là il faut mettre le mot de passe
+			formData.append('getCSRFToken', 'true');
+			//formData.append('_csrf_token', json.CSRFToken);
+
+			try {
+				const response = await fetch('http://127.0.0.1:8888/login_check', {
+					method: 'POST',
+					body: formData,
+				});
+
+				if (!response.ok) {
+					throw new Error('Request failed!');
+				}
+
+				const data = await response.json();
+				console.log(data);
+			} catch (err) {
+				setError(err.message || 'Something went wrong!');
+			}
 		},
 	});
 

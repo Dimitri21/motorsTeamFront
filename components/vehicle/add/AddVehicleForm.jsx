@@ -28,6 +28,9 @@ export default function AddVehicleForm() {
 	const [activeStep, setActiveStep] = React.useState(0);
 	const steps = getSteps();
 
+	// Vehicle condition
+	const [vehicleCondition, setVehicleCondition] = useState('Bon état');
+
 	// Vehicle
 	const vehicleInit = {
 		carModel: '',
@@ -41,6 +44,7 @@ export default function AddVehicleForm() {
 		brand: '',
 		carType: '',
 		title: '',
+		conidtion: '',
 		localisation: '',
 		vehicleCondition: '',
 		thumbnail: '',
@@ -84,6 +88,11 @@ export default function AddVehicleForm() {
 		handleNext();
 		valuesReset();
 		setIsLoading(false);
+		setTitleIsSet(false);
+		setUploadedImages('');
+		setThumbnailImageIsSet(false);
+		setThumbnailImage('');
+		setVehicleCondition('Bon état')
 	};
 
 	// Stepper
@@ -118,7 +127,15 @@ export default function AddVehicleForm() {
 					/>
 				);
 			case 3:
-				return <VariousForm vehicle={vehicle} setVehicle={setVehicle} setStepIsValid={setStepPriceIsValid} />;
+				return (
+					<VariousForm
+						vehicle={vehicle}
+						setVehicle={setVehicle}
+						setStepIsValid={setStepPriceIsValid}
+						vehicleCondition={vehicleCondition}
+						setVehicleCondition={setVehicleCondition}
+					/>
+				);
 			default:
 				return 'Unknown stepIndex';
 		}

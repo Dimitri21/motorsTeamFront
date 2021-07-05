@@ -4,26 +4,26 @@ import classes from './VehicleStateSelect.module.scss';
 
 export default function VehicleStateSelect(props) {
 	const handleChange = (event) => {
-		setVehicleState(event.target.value);
+		props.setVehicleCondition(event.target.value);
 	};
 
 	return (
 		<>
 			<FormControl>
 				<Select
-					value={props.vehicleState}
+					value={props.vehicleCondition}
 					onChange={handleChange}
 					displayEmpty
 					className={classes.values}
 					inputProps={{ 'aria-label': 'Without Label' }}
 				>
-					<MenuItem value={'new'}>Neuf</MenuItem>
-					<MenuItem value={'very-good-condition'}>Très bon état</MenuItem>
-					<MenuItem value={'good-condition'}>Bon état</MenuItem>
-					<MenuItem value={'average-condition'}>Etat correct</MenuItem>
-					<MenuItem value={'injured'}>Réparation à réaliser</MenuItem>
-					<MenuItem value={'non-rolling-vehicle'}>Non roulant</MenuItem>
-					<MenuItem value={'others'}>Autres</MenuItem>
+					<MenuItem value={'Neuf'}>Neuf</MenuItem>
+					<MenuItem value={'Très bon état'}>Très bon état</MenuItem>
+					<MenuItem value={'Bon état'}>Bon état</MenuItem>
+					<MenuItem value={'Etat correct'}>Etat correct</MenuItem>
+					<MenuItem value={'Défaut connu'}>Défaut connu</MenuItem>
+					<MenuItem value={'Non roulant'}>Non roulant</MenuItem>
+					<MenuItem value={'Autres'}>Autres</MenuItem>
 				</Select>
 			</FormControl>
 		</>

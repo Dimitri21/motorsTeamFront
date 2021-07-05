@@ -5,7 +5,7 @@ import { TextField } from '@material-ui/core';
 import useInput from '../../Hooks/use-input';
 import VehicleStateSelect from './VehicleStateSelect/VehicleStateSelect';
 
-export default function VariousForm({ vehicle, setVehicle, setStepIsValid }) {
+export default function VariousForm({ vehicle, setVehicle, setStepIsValid, vehicleCondition, setVehicleCondition }) {
 
 	const {
 		value: priceValue,
@@ -52,8 +52,6 @@ export default function VariousForm({ vehicle, setVehicle, setStepIsValid }) {
 		reset: resetLocalisation,
 	} = useInput(isNotEmpty, vehicle.localisation);
 
-	const [vehicleState, setVehicleState] = useState('good-condition');
-
 	if (priceIsValid && distanceIsValid && titleIsValid) {
 		setStepIsValid(true);
 	}
@@ -66,8 +64,10 @@ export default function VariousForm({ vehicle, setVehicle, setStepIsValid }) {
 			title: titleValue,
 			description: descriptionValue,
 			localisation: localisationValue,
+			condition: vehicleCondition,
 		});
-	}, [priceValue, distanceValue, titleValue, descriptionValue, localisationValue]);
+	}, [priceValue, distanceValue, titleValue, descriptionValue, localisationValue, vehicleCondition]);
+
 
 	return (
 		<div className={`slideAnimation`}>
@@ -126,7 +126,7 @@ export default function VariousForm({ vehicle, setVehicle, setStepIsValid }) {
 				/>
 			</div>
 			<div className={classes.formControl}>
-				<VehicleStateSelect vehicleState={vehicleState} setVehicleState={setVehicleState} />
+				<VehicleStateSelect vehicleCondition={vehicleCondition} setVehicleCondition={setVehicleCondition} />
 			</div>
 
 			<div className={classes.formControl}>
