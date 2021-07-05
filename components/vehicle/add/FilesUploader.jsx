@@ -1,14 +1,29 @@
 import { Button } from '@material-ui/core';
-import { useState, useRef } from 'react';
+import Image from 'next/image';
+import { useState, useRef, useEffect } from 'react';
+import classes from './AddVehicleForm.module.scss';
 
-export default function FileUploader(vehicle, setVehicle) {
+export default function FileUploader(props) {
 	const [uploadedImages, setUploadedImages] = useState([]);
-	const [thumbnail, setThumbnail] = useState();
+	const [thumbnailImage, setThumbnailImage] = useState('');
+	const [thumbnailImageIsSet, setThumbnailImageIsSet] = useState(false);
+
+
+	// Set pregenerate title of ads on this step for avoiding problem with useEffect, and avoid unwanted modification when the user go back
+	useEffect(() => {
+		if (props.titleIsSet === false) {
+			const titleAds = `${props.vehicle.brand} ${props.vehicle.carModel} ${props.vehicle.motor}`;
+			props.setVehicle({
+				...props.vehicle,
+				title: titleAds,
+			});
+			props.setTitleIsSet(true);
+		}
+	}, []);
 
 	const thumbnailHandler = (event) => {
-		uploadFile(event.target.files[0], setThumbnail);
+		uploadThumbnail(event.target.files[0], 'thumbnail');
 	};
-	console.log(thumbnail);
 
 	// function getBase64(file) {
 	// 	reader.readAsDataURL(selectedFile);
@@ -39,7 +54,7 @@ export default function FileUploader(vehicle, setVehicle) {
 	// 	}
 	// }
 
-	const uploadFile = (file, storage) => {
+	const uploadThumbnail = (file, storage) => {
 		let reader = new FileReader();
 		reader.readAsDataURL(file);
 		reader.onload = function () {
@@ -57,7 +72,19 @@ export default function FileUploader(vehicle, setVehicle) {
 				.then((response) => response.json())
 				.then((result) => {
 					console.log('Success:', result);
-					storage(result.src)
+					if (storage === 'thumbnail') {
+						props.setVehicle({
+							...props.vehicle,
+							thumbnail: result.src,
+						});
+						setThumbnailImage(result.src);
+						setThumbnailImageIsSet(true);
+					} else {
+						props.setVehicle({
+							...props.vehicle,
+							thumbnail: result.src,
+						});
+					}
 				})
 				.catch((error) => {
 					console.error('Error:', error);
@@ -89,53 +116,49 @@ export default function FileUploader(vehicle, setVehicle) {
 	// 	});
 	// };
 
-	const handleSubmission = () => {
-		let reader = new FileReader();
-		reader.readAsDataURL(selectedFile);
-		reader.onload = function () {
-			let myHeaders = new Headers();
-			myHeaders.append('X-AUTH-TOKEN', 'jam-jam_API_Token_oczZ23V*F');
+	// const handleSubmission = () => {
+	// 	let reader = new FileReader();
+	// 	reader.readAsDataURL(selectedFile);
+	// 	reader.onload = function () {
+	// 		let myHeaders = new Headers();
+	// 		myHeaders.append('X-AUTH-TOKEN', 'jam-jam_API_Token_oczZ23V*F');
 
-			let formData = new FormData();
-			formData.append('image', reader.result);
+	// 		let formData = new FormData();
+	// 		formData.append('image', reader.result);
 
-			fetch('http://localhost:8888/api/image/', {
-				method: 'POST',
-				body: formData,
-				headers: myHeaders,
-			})
-				.then((response) => response.json())
-				.then((result) => {
-					console.log('Success:', result);
-					setVehicle({ ...vehicle, images: uploadedImages });
-				})
-				.catch((error) => {
-					console.error('Error:', error);
-				});
-		};
-	};
+	// 		fetch('http://localhost:8888/api/image/', {
+	// 			method: 'POST',
+	// 			body: formData,
+	// 			headers: myHeaders,
+	// 		})
+	// 			.then((response) => response.json())
+	// 			.then((result) => {
+	// 				console.log('Success:', result);
+	// 				setVehicle({ ...vehicle, images: uploadedImages });
+	// 			})
+	// 			.catch((error) => {
+	// 				console.error('Error:', error);
+	// 			});
+	// 	};
+	// };
 
 	return (
 		<div className={`slideAnimation`}>
 			<div>
 				<p>Image princpale</p>
+				{thumbnailImageIsSet ? <img className={classes.thumbnailImage} src={thumbnailImage} /> : null}
+
 				<input type="file" name="thumbnail" onChange={thumbnailHandler} />
 			</div>
 			<div>
-				<p>Galleries</p>
-				<input className="" type="file" name="file" onChange="" multiple />
+				<p>Galeries</p>
+				<input className="" type="file" name="file" onChange={thumbnailHandler} multiple />
 			</div>
 
 			{/* <input type="file" name="file" onChange={fileSelectedHandler} />
 			<input type="file" name="file" onChange={fileSelectedHandler} />
 			<input type="file" name="file" onChange={fileSelectedHandler} />
 			<input type="file" name="file" onChange={fileSelectedHandler} /> */}
-
-			<div>
-				<button type="button" onClick={handleSubmission}>
-					Télécharger
-				</button>
-			</div>
 		</div>
 	);
 }

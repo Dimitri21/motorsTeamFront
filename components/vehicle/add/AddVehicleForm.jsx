@@ -17,6 +17,9 @@ export default function AddVehicleForm() {
 	const [stepApiIsValid, setStepApiIsValid] = useState(false);
 	const [stepPriceIsValid, setStepPriceIsValid] = useState(false);
 	const [stepPicturesIsValid, setStepPicturesIsValid] = useState(false);
+	// Use to store the initialisaton of the pregenerate title
+	const [titleIsSet, setTitleIsSet] = useState(false);
+	
 
 
 	// Stepper
@@ -38,6 +41,7 @@ export default function AddVehicleForm() {
 		title: '',
 		localisation: '',
 		vehicleCondition: '',
+		thumbnail: '',
 		images: {},
 	};
 
@@ -96,7 +100,7 @@ export default function AddVehicleForm() {
 					/>
 				);
 			case 2:
-				return <FilesUploader setVehicle={setVehicle} setStepIsValid={setStepPicturesIsValid} />;
+				return <FilesUploader vehicle={vehicle} setVehicle={setVehicle} setStepIsValid={setStepPicturesIsValid} setTitleIsSet={setTitleIsSet} titleIsSet={titleIsSet} />;
 			case 3:
 				return (
 					<VariousForm vehicle={vehicle} setVehicle={setVehicle} setStepIsValid={setStepPriceIsValid} />

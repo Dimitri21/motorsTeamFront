@@ -24,14 +24,14 @@ export default function VehicleApiForm({ vehicle, setVehicle, setStepIsValid }) 
 		reset: resetCarModel,
 	} = useInput(isNotEmpty, vehicle.carModel);
 
-		const {
-			value: motorValue,
-			isValid: motorIsValid,
-			hasError: motorHasError,
-			valueChangeHandler: motorChangeHandler,
-			inputBlurHandler: motorBlurHandler,
-			reset: resetMotor,
-		} = useInput(isNotEmpty, vehicle.motor);
+	const {
+		value: motorValue,
+		isValid: motorIsValid,
+		hasError: motorHasError,
+		valueChangeHandler: motorChangeHandler,
+		inputBlurHandler: motorBlurHandler,
+		reset: resetMotor,
+	} = useInput(isNotEmpty, vehicle.motor);
 
 	const {
 		value: carTypeValue,
@@ -69,21 +69,22 @@ export default function VehicleApiForm({ vehicle, setVehicle, setStepIsValid }) 
 		reset: resetRegistrationDate,
 	} = useInput(isNotEmpty, vehicle.registrationDate);
 
-
 	useEffect(() => {
-
+			setVehicle({
+				...vehicle,
+				brand: brandValue,
+				carModel: carModelValue,
+				carType: carTypeValue,
+				motor: motorValue,
+				gearbox: gearboxValue,
+				fuelType: fuelTypeValue,
+				registrationDate: registrationDateValue,
+			});
 		
-		setVehicle({
-			...vehicle,
-			brand: brandValue,
-			carModel: carModelValue,
-			carType: carTypeValue,
-			motor: motorValue,
-			gearbox: gearboxValue,
-			fuelType: fuelTypeValue,
-			registrationDate: registrationDateValue,
-		});
 	}, [brandValue, carModelValue, carTypeValue, gearboxValue, fuelTypeValue, registrationDateValue, motorValue]);
+
+	
+
 
 	return (
 		<div className={`slideAnimation`}>

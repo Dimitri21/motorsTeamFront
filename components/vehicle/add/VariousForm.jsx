@@ -6,6 +6,7 @@ import useInput from '../../Hooks/use-input';
 import VehicleStateSelect from './VehicleStateSelect/VehicleStateSelect';
 
 export default function VariousForm({ vehicle, setVehicle, setStepIsValid }) {
+
 	const {
 		value: priceValue,
 		isValid: priceIsValid,
@@ -13,7 +14,7 @@ export default function VariousForm({ vehicle, setVehicle, setStepIsValid }) {
 		valueChangeHandler: priceChangeHandler,
 		inputBlurHandler: priceBlurHandler,
 		reset: resetPrice,
-	} = useInput(isNotEmpty);
+	} = useInput(isNotEmpty, vehicle.price);
 
 	const {
 		value: distanceValue,
@@ -22,7 +23,7 @@ export default function VariousForm({ vehicle, setVehicle, setStepIsValid }) {
 		valueChangeHandler: distanceChangeHandler,
 		inputBlurHandler: distanceBlurHandler,
 		reset: resetDistance,
-	} = useInput(isNotEmpty);
+	} = useInput(isNotEmpty, vehicle.distance);
 
 	const {
 		value: descriptionValue,
@@ -31,7 +32,7 @@ export default function VariousForm({ vehicle, setVehicle, setStepIsValid }) {
 		valueChangeHandler: descriptionChangeHandler,
 		inputBlurHandler: descriptionBlurHandler,
 		reset: resetDescription,
-	} = useInput(isNotEmpty);
+	} = useInput(isNotEmpty, vehicle.description);
 
 	const {
 		value: titleValue,
@@ -40,7 +41,7 @@ export default function VariousForm({ vehicle, setVehicle, setStepIsValid }) {
 		valueChangeHandler: titleChangeHandler,
 		inputBlurHandler: titleBlurHandler,
 		reset: resetTitle,
-	} = useInput(isNotEmpty, `${vehicle.brand} ${vehicle.carModel} ${vehicle.motor}`);
+	} = useInput(isNotEmpty, vehicle.title);
 
 	const {
 		value: localisationValue,
@@ -49,7 +50,7 @@ export default function VariousForm({ vehicle, setVehicle, setStepIsValid }) {
 		valueChangeHandler: localisationChangeHandler,
 		inputBlurHandler: localisationBlurHandler,
 		reset: resetLocalisation,
-	} = useInput(isNotEmpty);
+	} = useInput(isNotEmpty, vehicle.localisation);
 
 	const [vehicleState, setVehicleState] = useState('good-condition');
 
@@ -58,16 +59,14 @@ export default function VariousForm({ vehicle, setVehicle, setStepIsValid }) {
 	}
 
 	useEffect(() => {
-		return () => {
-			setVehicle({
-				...vehicle,
-				price: priceValue,
-				distance: distanceValue,
-				title: titleValue,
-				description: descriptionValue,
-				localisation: localisationValue,
-			});
-		};
+		setVehicle({
+			...vehicle,
+			price: priceValue,
+			distance: distanceValue,
+			title: titleValue,
+			description: descriptionValue,
+			localisation: localisationValue,
+		});
 	}, [priceValue, distanceValue, titleValue, descriptionValue, localisationValue]);
 
 	return (
