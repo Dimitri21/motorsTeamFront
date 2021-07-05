@@ -19,8 +19,10 @@ export default function AddVehicleForm() {
 	const [stepPicturesIsValid, setStepPicturesIsValid] = useState(false);
 	// Use to store the initialisaton of the pregenerate title
 	const [titleIsSet, setTitleIsSet] = useState(false);
-	
-
+	// Images
+	const [uploadedImages, setUploadedImages] = useState([]);
+	const [thumbnailImage, setThumbnailImage] = useState('');
+	const [thumbnailImageIsSet, setThumbnailImageIsSet] = useState(false);
 
 	// Stepper
 	const [activeStep, setActiveStep] = React.useState(0);
@@ -46,7 +48,7 @@ export default function AddVehicleForm() {
 	};
 
 	const [vehicle, setVehicle] = useState(vehicleInit);
-	console.log(vehicle)
+	console.log(vehicle);
 
 	// Form Inputs
 
@@ -100,11 +102,23 @@ export default function AddVehicleForm() {
 					/>
 				);
 			case 2:
-				return <FilesUploader vehicle={vehicle} setVehicle={setVehicle} setStepIsValid={setStepPicturesIsValid} setTitleIsSet={setTitleIsSet} titleIsSet={titleIsSet} />;
-			case 3:
 				return (
-					<VariousForm vehicle={vehicle} setVehicle={setVehicle} setStepIsValid={setStepPriceIsValid} />
+					<FilesUploader
+						vehicle={vehicle}
+						setVehicle={setVehicle}
+						setStepIsValid={setStepPicturesIsValid}
+						setTitleIsSet={setTitleIsSet}
+						titleIsSet={titleIsSet}
+						uploadedImages={uploadedImages}
+						setUploadedImages={setUploadedImages}
+						thumbnailImage={thumbnailImage}
+						setThumbnailImage={setThumbnailImage}
+						thumbnailImageIsSet={thumbnailImageIsSet}
+						setThumbnailImageIsSet={setThumbnailImageIsSet}
+					/>
 				);
+			case 3:
+				return <VariousForm vehicle={vehicle} setVehicle={setVehicle} setStepIsValid={setStepPriceIsValid} />;
 			default:
 				return 'Unknown stepIndex';
 		}

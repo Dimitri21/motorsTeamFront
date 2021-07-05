@@ -33,12 +33,16 @@ export default function LicencePlateForm({ vehicle, handleNext, setVehicle }) {
 	async function apiPlateHandler() {
 		setIsLoading(true);
 		const url = 'http://localhost:8888/licencePlate';
+		let values = JSON.stringify({ licencePlate: licencePlateValue.trim() });
+		let myHeaders = new Headers();
+		myHeaders.append('Content-Type', 'application/json');
+		myHeaders.append('X-AUTH-TOKEN', 'jam-jam_API_Token_oczZ23V*F');
 
 		try {
 			const response = await fetch(url, {
-				method: 'GET',
-				headers: {},
-				body: null,
+				method: 'POST',
+				headers: myHeaders,
+				body: values,
 			});
 
 			if (!response.ok) {
@@ -64,8 +68,7 @@ export default function LicencePlateForm({ vehicle, handleNext, setVehicle }) {
 		handleNext();
 	}
 
-	console.log(vehicle)
-	
+	console.log(vehicle);
 
 	async function onSubmitHandler(e) {
 		e.preventDefault();
@@ -76,8 +79,11 @@ export default function LicencePlateForm({ vehicle, handleNext, setVehicle }) {
 	}
 
 	return (
-		<div className={`${classes.licencePlate } slideAnimation`}>
-			<p>Trouvez votre véhicule à partir de la plaque d'immatriculation, ou passez à l'étape suivante si vous souhaitez rentrer les informations manuellement</p>
+		<div className={`${classes.licencePlate} slideAnimation`}>
+			<p>
+				Trouvez votre véhicule à partir de la plaque d'immatriculation, ou passez à l'étape suivante si vous
+				souhaitez rentrer les informations manuellement
+			</p>
 			<div className={classes.licencePlateForm}>
 				<div className={classes.formControl}>
 					<TextField

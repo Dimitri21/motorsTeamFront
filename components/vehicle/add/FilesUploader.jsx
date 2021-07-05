@@ -4,10 +4,6 @@ import { useState, useRef, useEffect } from 'react';
 import classes from './AddVehicleForm.module.scss';
 
 export default function FileUploader(props) {
-	const [uploadedImages, setUploadedImages] = useState([]);
-	const [thumbnailImage, setThumbnailImage] = useState('');
-	const [thumbnailImageIsSet, setThumbnailImageIsSet] = useState(false);
-
 
 	// Set pregenerate title of ads on this step for avoiding problem with useEffect, and avoid unwanted modification when the user go back
 	useEffect(() => {
@@ -77,8 +73,8 @@ export default function FileUploader(props) {
 							...props.vehicle,
 							thumbnail: result.src,
 						});
-						setThumbnailImage(result.src);
-						setThumbnailImageIsSet(true);
+						props.setThumbnailImage(result.src);
+						props.setThumbnailImageIsSet(true);
 					} else {
 						props.setVehicle({
 							...props.vehicle,
@@ -143,22 +139,27 @@ export default function FileUploader(props) {
 	// };
 
 	return (
-		<div className={`slideAnimation`}>
-			<div>
-				<p>Image princpale</p>
-				{thumbnailImageIsSet ? <img className={classes.thumbnailImage} src={thumbnailImage} /> : null}
-
-				<input type="file" name="thumbnail" onChange={thumbnailHandler} />
+		<div className={`slideAnimation ${classes.galery}`}>
+			<div className={classes.uploaderCard}>
+				<h3>Image de l'annonce</h3>
+				<div>
+					{props.thumbnailImageIsSet ? (
+						<img className={classes.thumbnailImage} src={props.thumbnailImage} />
+					) : null}
+				</div>
+				<input
+					type="file"
+					name="thumbnail"
+					id="thumbnail"
+					className={classes.inputfile}
+					onChange={thumbnailHandler}
+				/>
+				<label for="thumbnail">Choisissez un fichier</label>
 			</div>
-			<div>
-				<p>Galeries</p>
+			<div className={classes.uploaderCard}>
+				<h3>Galerie</h3>
 				<input className="" type="file" name="file" onChange={thumbnailHandler} multiple />
 			</div>
-
-			{/* <input type="file" name="file" onChange={fileSelectedHandler} />
-			<input type="file" name="file" onChange={fileSelectedHandler} />
-			<input type="file" name="file" onChange={fileSelectedHandler} />
-			<input type="file" name="file" onChange={fileSelectedHandler} /> */}
 		</div>
 	);
 }
