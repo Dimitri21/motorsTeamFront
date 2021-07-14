@@ -20,6 +20,10 @@ export default function FileUploader(props) {
 		uploadThumbnail(event.target.files[0]);
 	};
 
+	const imagesHandler = (event) => {
+		uploadImages(event.target.files[0]);
+	};
+
 	// function getBase64(file) {
 	// 	reader.readAsDataURL(selectedFile);
 
@@ -49,7 +53,7 @@ export default function FileUploader(props) {
 	// 	}
 	// }
 
-	const uploadThumbnail = (file, storage) => {
+	const uploadThumbnail = (file) => {
 		let reader = new FileReader();
 		reader.readAsDataURL(file);
 		reader.onload = function () {
@@ -80,6 +84,32 @@ export default function FileUploader(props) {
 		};
 	};
 
+	const uploadImages = (file) => {
+		let reader = new FileReader();
+		reader.readAsDataURL(file);
+		reader.onload = function () {
+			let myHeaders = new Headers();
+			myHeaders.append('X-AUTH-TOKEN', 'jam-jam_API_Token_oczZ23V*F');
+
+			let formData = new FormData();
+			formData.append('image', reader.result);
+
+			fetch('http://localhost:8888/api/image/', {
+				method: 'POST',
+				body: formData,
+				headers: myHeaders,
+			})
+				.then((response) => response.json())
+				.then((result) => {
+					console.log('Success:', result);
+					props.setUploadedImages((previous) => [...previous, result.src]);
+				})
+				.catch((error) => {
+					console.error('Error:', error);
+				});
+			};
+		};
+		
 	// function uploadFile(file, name) {
 	// 	let xhttp = new XMLHttpRequest();
 	// 	xhttp.onload = function () {
@@ -150,7 +180,12 @@ export default function FileUploader(props) {
 			</div>
 			<div className={classes.uploaderCard}>
 				<h3>Galerie</h3>
-				<input className="" type="file" name="file" onChange={thumbnailHandler} multiple />
+
+				<div>
+					{props.uploadedImages.length > 0 &&
+						props.uploadedImages.map((image) => <img className={classes.thumbnailImage} src={image} />)}
+				</div>
+				<input className="" type="file" name="file" onChange={imagesHandler} />
 			</div>
 		</div>
 	);

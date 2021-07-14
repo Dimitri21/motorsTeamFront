@@ -44,7 +44,7 @@ export default function AddVehicleForm() {
 		brand: '',
 		carType: '',
 		title: '',
-		conidtion: '',
+		condition: '',
 		localisation: '',
 		vehicleCondition: '',
 		thumbnail: '',

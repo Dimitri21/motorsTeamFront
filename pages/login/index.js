@@ -15,7 +15,7 @@ const validationSchema = yup.object({
 
 export default function Login() {
 	const { isLoading, sendRequest: sendLoginRequest } = useHttp();
-	const [error, setError] = useState()
+	const [error, setError] = useState();
 
 	const formik = useFormik({
 		initialValues: {
@@ -24,16 +24,28 @@ export default function Login() {
 		},
 		validationSchema: validationSchema,
 		onSubmit: async (values) => {
-			let jsonData = JSON.stringify({
-				email: values.email,
-				password: values.password,
+			// let jsonData = JSON.stringify({
+			// 	email: values.email,
+			// 	password: values.password,
+			// });
+
+			const CSRFresponse = await fetch('http://127.0.0.1:8888/getCSRFToken', {
+				method: 'POST',
 			});
+
+			if (!CSRFresponse.ok) {
+				throw new Error('Request failed!');
+			}
+
+			const dataCSRF = await CSRFresponse.json();
+			const CSRFtoken = dataCSRF.CSRFToken;
+			console.log(CSRFtoken);
 
 			let formData = new FormData();
 			formData.append('_username', 'jam-jam'); // là il faut mettre le nom d'utilisateur
 			formData.append('password', 'azertyuiop*'); // là il faut mettre le mot de passe
 			formData.append('getCSRFToken', 'true');
-			//formData.append('_csrf_token', json.CSRFToken);
+			formData.append('_csrf_token', CSRFtoken);
 
 			try {
 				const response = await fetch('http://127.0.0.1:8888/login_check', {
@@ -47,6 +59,7 @@ export default function Login() {
 
 				const data = await response.json();
 				console.log(data);
+				// localStorage.setItem('token', 'token of the API');
 			} catch (err) {
 				setError(err.message || 'Something went wrong!');
 			}

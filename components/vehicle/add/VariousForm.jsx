@@ -6,7 +6,6 @@ import useInput from '../../Hooks/use-input';
 import VehicleStateSelect from './VehicleStateSelect/VehicleStateSelect';
 
 export default function VariousForm({ vehicle, setVehicle, setStepIsValid, vehicleCondition, setVehicleCondition }) {
-
 	const {
 		value: priceValue,
 		isValid: priceIsValid,
@@ -67,7 +66,6 @@ export default function VariousForm({ vehicle, setVehicle, setStepIsValid, vehic
 			condition: vehicleCondition,
 		});
 	}, [priceValue, distanceValue, titleValue, descriptionValue, localisationValue, vehicleCondition]);
-
 
 	return (
 		<div className={`slideAnimation`}>

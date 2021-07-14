@@ -2,6 +2,8 @@ import { Grid, Button, Container, AppBar, Toolbar } from "@material-ui/core";
 import styles from "./Header.module.scss";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useContext } from "react";
+import AuthContext from "../../../store/auth-context";
 
 export default function Header(params) {
   const router = useRouter();
@@ -9,6 +11,8 @@ export default function Header(params) {
   const loginButtonClickHandler = () => {
     router.push("/login");
   };
+
+  const val = useContext(AuthContext)
 
   return (
       <AppBar position="fixed" className={styles.header}>
