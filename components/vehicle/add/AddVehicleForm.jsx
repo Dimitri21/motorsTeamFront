@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Step, StepLabel, Typography, Stepper, CardContent, Box, Button, CircularProgress } from '@material-ui/core';
 import LicencePlateForm from './LicencePlateForm';
 import VehicleApiForm from './VehicleApiForm';
@@ -19,10 +19,10 @@ export default function AddVehicleForm() {
 	const [stepPicturesIsValid, setStepPicturesIsValid] = useState(false);
 	// Use to store the initialisaton of the pregenerate title
 	const [titleIsSet, setTitleIsSet] = useState(false);
+
 	// Images
 	const [uploadedImages, setUploadedImages] = useState([]);
 	const [thumbnailImage, setThumbnailImage] = useState('');
-	const [thumbnailImageIsSet, setThumbnailImageIsSet] = useState(false);
 
 	// Stepper
 	const [activeStep, setActiveStep] = React.useState(0);
@@ -48,12 +48,13 @@ export default function AddVehicleForm() {
 		localisation: '',
 		vehicleCondition: '',
 		thumbnail: '',
-		images: {},
+		images: [],
 	};
 
 	const [vehicle, setVehicle] = useState(vehicleInit);
 	console.log(vehicle);
 
+	
 	// Form Inputs
 
 	let formIsValid = false;
@@ -90,7 +91,6 @@ export default function AddVehicleForm() {
 		setIsLoading(false);
 		setTitleIsSet(false);
 		setUploadedImages('');
-		setThumbnailImageIsSet(false);
 		setThumbnailImage('');
 		setVehicleCondition('Bon état')
 	};
@@ -122,8 +122,6 @@ export default function AddVehicleForm() {
 						setUploadedImages={setUploadedImages}
 						thumbnailImage={thumbnailImage}
 						setThumbnailImage={setThumbnailImage}
-						thumbnailImageIsSet={thumbnailImageIsSet}
-						setThumbnailImageIsSet={setThumbnailImageIsSet}
 					/>
 				);
 			case 3:

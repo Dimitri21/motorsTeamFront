@@ -16,6 +16,15 @@ export default function FileUploader(props) {
 		}
 	}, []);
 
+	useEffect(() => {
+			const vehicleImages = props.uploadedImages;
+			props.setVehicle({
+				...props.vehicle,
+				images: vehicleImages,
+			});
+		
+	}, [props.uploadedImages]);
+
 	const thumbnailHandler = (event) => {
 		uploadThumbnail(event.target.files[0]);
 	};
@@ -76,7 +85,6 @@ export default function FileUploader(props) {
 						thumbnail: result.src,
 					});
 					props.setThumbnailImage(result.src);
-					props.setThumbnailImageIsSet(true);
 				})
 				.catch((error) => {
 					console.error('Error:', error);
@@ -103,13 +111,14 @@ export default function FileUploader(props) {
 				.then((result) => {
 					console.log('Success:', result);
 					props.setUploadedImages((previous) => [...previous, result.src]);
+			
 				})
 				.catch((error) => {
 					console.error('Error:', error);
 				});
-			};
 		};
-		
+	};
+
 	// function uploadFile(file, name) {
 	// 	let xhttp = new XMLHttpRequest();
 	// 	xhttp.onload = function () {
@@ -165,9 +174,9 @@ export default function FileUploader(props) {
 			<div className={classes.uploaderCard}>
 				<h3>Image de l'annonce</h3>
 				<div>
-					{props.thumbnailImageIsSet ? (
+					{props.thumbnailImage.length > 0 && (
 						<img className={classes.thumbnailImage} src={props.thumbnailImage} />
-					) : null}
+					)}
 				</div>
 				<input
 					type="file"
