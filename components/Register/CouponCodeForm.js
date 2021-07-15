@@ -23,14 +23,14 @@ const CouponCodeForm = (props) => {
 
   return (
     <div>
-      <h2> Entrez votre code de parainnage</h2>
+      <h2> Entrez votre code de parrainage</h2>
       <form onSubmit={formik.handleSubmit}>
         <div className={classes.formControl}>
           <TextField
             fullWidth
             id="coupon"
             name="coupon"
-            label="Code de parainnage"
+            label="Code de parrainage"
             value={formik.values.coupon}
             onChange={formik.handleChange}
             error={formik.touched.coupon && Boolean(formik.errors.coupon)}

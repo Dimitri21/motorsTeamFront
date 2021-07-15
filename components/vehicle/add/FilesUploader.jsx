@@ -1,201 +1,144 @@
-import { Button } from '@material-ui/core';
-import Image from 'next/image';
-import { useState, useRef, useEffect } from 'react';
-import classes from './AddVehicleForm.module.scss';
+import { Button } from "@material-ui/core";
+import Image from "next/image";
+import { useState, useRef, useEffect } from "react";
+import classes from "./AddVehicleForm.module.scss";
 
 export default function FileUploader(props) {
-	// Set pregenerate title of ads on this step for avoiding problem with useEffect, and avoid unwanted modification when the user go back
-	useEffect(() => {
-		if (props.titleIsSet === false) {
-			const titleAds = `${props.vehicle.brand} ${props.vehicle.carModel} ${props.vehicle.motor}`;
-			props.setVehicle({
-				...props.vehicle,
-				title: titleAds,
-			});
-			props.setTitleIsSet(true);
-		}
-	}, []);
+  // Set pregenerate title of ads on this step for avoiding problem with useEffect, and avoid unwanted modification when the user go back
+  useEffect(() => {
+    if (props.titleIsSet === false) {
+      const titleAds = `${props.vehicle.brand} ${props.vehicle.carModel} ${props.vehicle.motor}`;
+      props.setVehicle({
+        ...props.vehicle,
+        title: titleAds,
+      });
+      props.setTitleIsSet(true);
+    }
+  }, []);
 
-	useEffect(() => {
-			const vehicleImages = props.uploadedImages;
-			props.setVehicle({
-				...props.vehicle,
-				images: vehicleImages,
-			});
-		
-	}, [props.uploadedImages]);
+  // Set vehicle image when change
+  useEffect(() => {
+    const vehicleImages = props.uploadedImages;
+    props.setVehicle({
+      ...props.vehicle,
+      images: vehicleImages,
+    });
+  }, [props.uploadedImages]);
 
-	const thumbnailHandler = (event) => {
-		uploadThumbnail(event.target.files[0]);
-	};
+  // Handler
 
-	const imagesHandler = (event) => {
-		uploadImages(event.target.files[0]);
-	};
+  const thumbnailHandler = (event) => {
+    uploadThumbnail(event.target.files[0]);
+  };
 
-	// function getBase64(file) {
-	// 	reader.readAsDataURL(selectedFile);
+  const imagesHandler = (event) => {
+    uploadImages(event.target.files[0]);
+  };
 
-	// 	reader.onload = function () {
-	// 		imagesInBAse64.push(reader.result);
-	// 		if (imagesInBAse64.length == fileInput.files.length) {
-	// 			console.log(imagesInBAse64); // tableau contenant les images au format text
-	// 			//displayGalery(imagesInBAse64);
-	// 			uploadFiles(imagesInBAse64);
-	// 		}
-	// 	};
+  const deleteImageHandler = (event) => {
+	  
+	let array = [...props.uploadedImages];
 
-	// 	reader.onerror = function (error) {
-	// 		console.log('Error: ', error);
-	// 	};
-	// }
+	  array.splice(event.target.id, 1)
+	  console.log(array)
+	  props.setUploadedImages(array)
+  };
 
-	// function displayGalery() {
-	// 	document.querySelector('#galery').innerHTML = imagesInBAse64.map((i) => '<img src="' + i + '" />').join('');
-	// }
+  const uploadThumbnail = (file) => {
+    let reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = function () {
+      let myHeaders = new Headers();
+      myHeaders.append("X-AUTH-TOKEN", "jam-jam_API_Token_oczZ23V*F");
 
-	// function uploadFiles(files) {
-	// 	let i = 0;
-	// 	for (let file of files) {
-	// 		uploadFile(file);
-	// 		i++;
-	// 	}
-	// }
+      let formData = new FormData();
+      formData.append("image", reader.result);
 
-	const uploadThumbnail = (file) => {
-		let reader = new FileReader();
-		reader.readAsDataURL(file);
-		reader.onload = function () {
-			let myHeaders = new Headers();
-			myHeaders.append('X-AUTH-TOKEN', 'jam-jam_API_Token_oczZ23V*F');
+      fetch("http://localhost:8888/api/image/", {
+        method: "POST",
+        body: formData,
+        headers: myHeaders,
+      })
+        .then((response) => response.json())
+        .then((result) => {
+          console.log("Success:", result);
+          props.setVehicle({
+            ...props.vehicle,
+            thumbnail: result.src,
+          });
+          props.setThumbnailImage(result.src);
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    };
+  };
 
-			let formData = new FormData();
-			formData.append('image', reader.result);
+  const uploadImages = (file) => {
+    let reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = function () {
+      let myHeaders = new Headers();
+      myHeaders.append("X-AUTH-TOKEN", "jam-jam_API_Token_oczZ23V*F");
 
-			fetch('http://localhost:8888/api/image/', {
-				method: 'POST',
-				body: formData,
-				headers: myHeaders,
-			})
-				.then((response) => response.json())
-				.then((result) => {
-					console.log('Success:', result);
-					props.setVehicle({
-						...props.vehicle,
-						thumbnail: result.src,
-					});
-					props.setThumbnailImage(result.src);
-				})
-				.catch((error) => {
-					console.error('Error:', error);
-				});
-		};
-	};
+      let formData = new FormData();
+      formData.append("image", reader.result);
 
-	const uploadImages = (file) => {
-		let reader = new FileReader();
-		reader.readAsDataURL(file);
-		reader.onload = function () {
-			let myHeaders = new Headers();
-			myHeaders.append('X-AUTH-TOKEN', 'jam-jam_API_Token_oczZ23V*F');
+      fetch("http://localhost:8888/api/image/", {
+        method: "POST",
+        body: formData,
+        headers: myHeaders,
+      })
+        .then((response) => response.json())
+        .then((result) => {
+          console.log("Success:", result);
+          props.setUploadedImages((previous) => [...previous, result.src]);
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    };
+  };
 
-			let formData = new FormData();
-			formData.append('image', reader.result);
+  return (
+    <div className={`slideAnimation ${classes.galery}`}>
+      <div className={classes.uploaderCard}>
+        <h3>Image de l'annonce</h3>
+        <div>
+          {props.thumbnailImage.length > 0 && (
+            <img
+              className={classes.thumbnailImage}
+              src={props.thumbnailImage}
+            />
+          )}
+        </div>
+        <input
+          type="file"
+          name="thumbnail"
+          id="thumbnail"
+          className={classes.inputfile}
+          onChange={thumbnailHandler}
+        />
+        <label htmlFor="thumbnail">Choisissez un fichier</label>
+      </div>
+      <div className={classes.uploaderCard}>
+        <h3>Galerie</h3>
 
-			fetch('http://localhost:8888/api/image/', {
-				method: 'POST',
-				body: formData,
-				headers: myHeaders,
-			})
-				.then((response) => response.json())
-				.then((result) => {
-					console.log('Success:', result);
-					props.setUploadedImages((previous) => [...previous, result.src]);
-			
-				})
-				.catch((error) => {
-					console.error('Error:', error);
-				});
-		};
-	};
-
-	// function uploadFile(file, name) {
-	// 	let xhttp = new XMLHttpRequest();
-	// 	xhttp.onload = function () {
-	// 		let json = JSON.parse(xhttp.responseText);
-	// 		console.log(json);
-	// 		let index = imagesInBAse64.indexOf(file);
-	// 		if (index != -1) {
-	// 			imagesInBAse64[index] = json.url;
-	// 		}
-	// 	};
-	// 	xhttp.open('POST', '/api/image/', true);
-	// 	xhttp.setRequestHeader('X-AUTH-TOKEN', 'jam-jam_API_Token_oczZ23V*F');
-	// 	let formData = new FormData();
-	// 	formData.append('image', file);
-	// 	formData.append('name', name);
-	// 	xhttp.send(formData);
-	// }
-
-	// const image2SelectedHandler = (event) => {
-	// 	setUploadedImages((prevValues) => {
-	// 		return { ...prevValues, image2: event.target.files[0] };
-	// 	});
-	// };
-
-	// const handleSubmission = () => {
-	// 	let reader = new FileReader();
-	// 	reader.readAsDataURL(selectedFile);
-	// 	reader.onload = function () {
-	// 		let myHeaders = new Headers();
-	// 		myHeaders.append('X-AUTH-TOKEN', 'jam-jam_API_Token_oczZ23V*F');
-
-	// 		let formData = new FormData();
-	// 		formData.append('image', reader.result);
-
-	// 		fetch('http://localhost:8888/api/image/', {
-	// 			method: 'POST',
-	// 			body: formData,
-	// 			headers: myHeaders,
-	// 		})
-	// 			.then((response) => response.json())
-	// 			.then((result) => {
-	// 				console.log('Success:', result);
-	// 				setVehicle({ ...vehicle, images: uploadedImages });
-	// 			})
-	// 			.catch((error) => {
-	// 				console.error('Error:', error);
-	// 			});
-	// 	};
-	// };
-
-	return (
-		<div className={`slideAnimation ${classes.galery}`}>
-			<div className={classes.uploaderCard}>
-				<h3>Image de l'annonce</h3>
-				<div>
-					{props.thumbnailImage.length > 0 && (
-						<img className={classes.thumbnailImage} src={props.thumbnailImage} />
-					)}
-				</div>
-				<input
-					type="file"
-					name="thumbnail"
-					id="thumbnail"
-					className={classes.inputfile}
-					onChange={thumbnailHandler}
-				/>
-				<label htmlFor="thumbnail">Choisissez un fichier</label>
-			</div>
-			<div className={classes.uploaderCard}>
-				<h3>Galerie</h3>
-
-				<div>
-					{props.uploadedImages.length > 0 &&
-						props.uploadedImages.map((image) => <img className={classes.thumbnailImage} src={image} />)}
-				</div>
-				<input className="" type="file" name="file" onChange={imagesHandler} />
-			</div>
-		</div>
-	);
+        <div>
+          {props.uploadedImages.length > 0 &&
+            props.uploadedImages.map((image, index) => {
+              return (
+                <div key={index} id={index} className="imageContainer">
+                  <img className={classes.uploadedImage} src={image} />
+                  <button type='button' onClick={deleteImageHandler} id={index}>
+                    Supprimer
+                  </button>
+                </div>
+              );
+            })}
+        </div>
+        <input className="" type="file" name="file" onChange={imagesHandler} />
+      </div>
+    </div>
+  );
 }
