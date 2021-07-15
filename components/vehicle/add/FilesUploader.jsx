@@ -38,7 +38,7 @@ export default function FileUploader(props) {
   const deleteImageHandler = (event) => {
 	  
 	let array = [...props.uploadedImages];
-
+	  console.log(event);
 	  array.splice(event.target.id, 1)
 	  console.log(array)
 	  props.setUploadedImages(array)
@@ -124,20 +124,28 @@ export default function FileUploader(props) {
       <div className={classes.uploaderCard}>
         <h3>Galerie</h3>
 
-        <div>
+        <div className={classes.imageGallery}>
           {props.uploadedImages.length > 0 &&
             props.uploadedImages.map((image, index) => {
               return (
-                <div key={index} id={index} className="imageContainer">
+                <div key={index} id={index} className={classes.imageContainer}>
                   <img className={classes.uploadedImage} src={image} />
-                  <button type='button' onClick={deleteImageHandler} id={index}>
+                  <div onClick={deleteImageHandler} id={index} className={classes.deleteButton}>
                     Supprimer
-                  </button>
+                  </div>
                 </div>
               );
             })}
         </div>
-        <input className="" type="file" name="file" onChange={imagesHandler} />
+        <input
+          name="imageUploader"
+          id="imageUploader"
+          className={classes.inputfile}
+          type="file"
+          name="file"
+          onChange={imagesHandler}
+        />
+        <label htmlFor="imageUploader">Choisissez un fichier</label>
       </div>
     </div>
   );
