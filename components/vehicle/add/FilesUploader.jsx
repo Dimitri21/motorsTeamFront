@@ -7,7 +7,7 @@ export default function FileUploader(props) {
   // Set pregenerate title of ads on this step for avoiding problem with useEffect, and avoid unwanted modification when the user go back
   useEffect(() => {
     if (props.titleIsSet === false) {
-      const titleAds = `${props.vehicle.brand} ${props.vehicle.carModel} ${props.vehicle.motor}`;
+      let titleAds = `${props.vehicle.brand} ${props.vehicle.carModel} ${props.vehicle.motor}`;
       props.setVehicle({
         ...props.vehicle,
         title: titleAds,
@@ -23,25 +23,50 @@ export default function FileUploader(props) {
       ...props.vehicle,
       images: vehicleImages,
     });
-  }, [props.uploadedImages]);
+
+    if (props.thumbnailImage.length >= 1 && props.uploadedImages.length >= 1) {
+      props.setStepIsValid(true);
+    } else {
+      props.setStepIsValid(false);
+    }
+  }, [props.uploadedImages, props.thumbnailImage]);
 
   // Handler
 
   const thumbnailHandler = (event) => {
-    uploadThumbnail(event.target.files[0]);
+    let image = event.target.files[0];
+
+    if (image.type === "image/jpeg" || image.type === "image/png") {
+      uploadThumbnail(event.target.files[0]);
+    } else {
+      alert(
+        "Le format de l'image n'est pas valide, merci de télécharger un jpeg ou un png"
+      );
+    }
   };
 
   const imagesHandler = (event) => {
-    uploadImages(event.target.files[0]);
+    let image = event.target.files[0];
+    if (
+      props.uploadedImages.length < 6 &&
+      (image.type === "image/jpeg" || image.type === "image/png")
+    ) {
+      uploadImages(image);
+    } else if (props.uploadedImages.length >= 6) {
+      alert("Le nombre maximum d'image est atteint");
+    } else {
+      alert(
+        "Le format de l'image n'est pas valide, merci de télécharger un jpeg ou un png"
+      );
+    }
   };
 
   const deleteImageHandler = (event) => {
-	  
-	let array = [...props.uploadedImages];
-	  console.log(event);
-	  array.splice(event.target.id, 1)
-	  console.log(array)
-	  props.setUploadedImages(array)
+    let array = [...props.uploadedImages];
+    console.log(event);
+    array.splice(event.target.id, 1);
+    console.log(array);
+    props.setUploadedImages(array);
   };
 
   const uploadThumbnail = (file) => {
@@ -123,6 +148,7 @@ export default function FileUploader(props) {
       </div>
       <div className={classes.uploaderCard}>
         <h3>Galerie</h3>
+        <p>Images téléchargées : {props.uploadedImages.length} / 6</p>
 
         <div className={classes.imageGallery}>
           {props.uploadedImages.length > 0 &&
@@ -130,7 +156,11 @@ export default function FileUploader(props) {
               return (
                 <div key={index} id={index} className={classes.imageContainer}>
                   <img className={classes.uploadedImage} src={image} />
-                  <div onClick={deleteImageHandler} id={index} className={classes.deleteButton}>
+                  <div
+                    onClick={deleteImageHandler}
+                    id={index}
+                    className={classes.deleteButton}
+                  >
                     Supprimer
                   </div>
                 </div>
