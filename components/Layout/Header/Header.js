@@ -7,6 +7,7 @@ import AuthContext from "../../../store/auth-context";
 
 export default function Header(params) {
   const router = useRouter();
+  const auth = useContext(AuthContext);
 
   const loginButtonClickHandler = () => {
     router.push("/login");
@@ -17,8 +18,7 @@ export default function Header(params) {
     router.push('/')
   };
 
-  const auth = useContext(AuthContext);
-
+  
   return (
     <AppBar position="fixed" className={styles.header}>
       <Toolbar>

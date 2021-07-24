@@ -37,48 +37,83 @@ const AuthContext = React.createContext({
 // };
 
 export const AuthContextProvider = (props) => {
-//   const tokenData = retrieveStoredToken();
+  //   const tokenData = retrieveStoredToken();
 
-//   let initialToken;
-//   if (tokenData) {
-//     initialToken = tokenData.token;
-//   }
+  //   let initialToken;
+  //   if (tokenData) {
+  //     initialToken = tokenData.token;
+  //   }
 
-//   const [token, setToken] = useState(initialToken);
+  //   const [token, setToken] = useState(initialToken);
 
-//   const userIsLoggedIn = !!token;
+  //   const userIsLoggedIn = !!token;
 
-//   const logoutHandler = useCallback(() => {
-//     setToken(null);
-//     localStorage.removeItem("token");
-//     localStorage.removeItem("expirationTime");
+  //   const logoutHandler = useCallback(() => {
+  //     setToken(null);
+  //     localStorage.removeItem("token");
+  //     localStorage.removeItem("expirationTime");
 
-//     if (logoutTimer) {
-//       clearTimeout(logoutTimer);
-//     }
-//   }, []);
+  //     if (logoutTimer) {
+  //       clearTimeout(logoutTimer);
+  //     }
+  //   }, []);
 
-//   const loginHandler = (token, expirationTime) => {
-//     setToken(token);
-//     localStorage.setItem("token", token);
-//     localStorage.setItem("expirationTime", expirationTime);
+  const loginHandler = async (email, password, token, expirationTime) => {
+    const CSRFresponse = await fetch("http://127.0.0.1:8888/getCSRFToken", {
+      method: "POST",
+    });
 
-//     const remainingTime = calculateRemainingTime(expirationTime);
+    if (!CSRFresponse.ok) {
+      throw new Error("Request failed!");
+    }
 
-//     logoutTimer = setTimeout(logoutHandler, remainingTime);
-//   };
+    const dataCSRF = await CSRFresponse.json();
+    const CSRFtoken = dataCSRF.CSRFToken;
+    console.log(CSRFtoken);
 
-//   useEffect(() => {
-//     if (tokenData) {
-//       console.log(tokenData.duration);
-//       logoutTimer = setTimeout(logoutHandler, tokenData.duration);
-//     }
-//   }, [tokenData, logoutHandler]);
+    let formData = new FormData();
+    formData.append("_username", "jam-jam"); // là il faut mettre le nom d'utilisateur
+    formData.append("password", "azertyuiop*"); // là il faut mettre le mot de passe
+    formData.append("getCSRFToken", "true");
+    formData.append("_csrf_token", CSRFtoken);
+
+    try {
+      const response = await fetch("http://127.0.0.1:8888/login_check", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error("Request failed!");
+      }
+
+      const data = await response.json();
+      console.log(data);
+      // localStorage.setItem('token', 'token of the API');
+    } catch (err) {
+      setError(err.message || "Something went wrong!");
+    }
+
+    //   setToken(token);
+    //   localStorage.setItem("token", token);
+    //   localStorage.setItem("expirationTime", expirationTime);
+
+    //   const remainingTime = calculateRemainingTime(expirationTime);
+
+    //   logoutTimer = setTimeout(logoutHandler, remainingTime);
+  };
+
+  //   useEffect(() => {
+  //     if (tokenData) {
+  //       console.log(tokenData.duration);
+  //       logoutTimer = setTimeout(logoutHandler, tokenData.duration);
+  //     }
+  //   }, [tokenData, logoutHandler]);
 
   const contextValue = {
-    token: 'token',
-    isLoggedIn: true,
-    login: "loginHandler",
+    token: "token",
+    isLoggedIn: false,
+    login: loginHandler,
     logout: "logoutHandler",
   };
 
@@ -90,7 +125,6 @@ export const AuthContextProvider = (props) => {
 };
 
 export default AuthContext;
-
 
 // let xhttp = new XMLHttpRequest();
 // xhttp.onload = function () {
