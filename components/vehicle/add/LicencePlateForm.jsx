@@ -68,8 +68,6 @@ export default function LicencePlateForm({ vehicle, handleNext, setVehicle }) {
 		handleNext();
 	}
 
-	console.log(vehicle);
-
 	async function onSubmitHandler(e) {
 		e.preventDefault();
 		if (!formIsValid) {
@@ -81,7 +79,7 @@ export default function LicencePlateForm({ vehicle, handleNext, setVehicle }) {
 	return (
 		<div className={`${classes.licencePlate} slideAnimation`}>
 			<p>
-				Trouvez votre véhicule à partir de la plaque d'immatriculation, ou passez à l'étape suivante si vous
+				Trouvez votre véhicule à partir de la plaque d'immatriculation (format sans tiret, ex : AA1111MM), ou passez à l'étape suivante si vous
 				souhaitez rentrer les informations manuellement
 			</p>
 			<div className={classes.licencePlateForm}>
@@ -90,7 +88,7 @@ export default function LicencePlateForm({ vehicle, handleNext, setVehicle }) {
 						fullWidth
 						id="licencePlate"
 						name="licencePlate"
-						label="Plaque d'immatriculation"
+						label="Ex : AA1111LL"
 						value={licencePlateValue}
 						onChange={licencePlateChangeHandler}
 						onBlur={licencePlateBlurHandler}

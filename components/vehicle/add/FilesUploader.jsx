@@ -4,18 +4,6 @@ import { useState, useRef, useEffect } from "react";
 import classes from "./AddVehicleForm.module.scss";
 
 export default function FileUploader(props) {
-  // Set pregenerate title of ads on this step for avoiding problem with useEffect, and avoid unwanted modification when the user go back
-  useEffect(() => {
-    if (props.titleIsSet === false) {
-      let titleAds = `${props.vehicle.brand} ${props.vehicle.carModel} ${props.vehicle.motor}`;
-      props.setVehicle({
-        ...props.vehicle,
-        title: titleAds,
-      });
-      props.setTitleIsSet(true);
-    }
-  }, []);
-
   // Set vehicle image when change
   useEffect(() => {
     const vehicleImages = props.uploadedImages;
@@ -30,6 +18,18 @@ export default function FileUploader(props) {
       props.setStepIsValid(false);
     }
   }, [props.uploadedImages, props.thumbnailImage]);
+
+  // Set pregenerate title of ads on this step for avoiding problem with useEffect, and avoid unwanted modification when the user go back
+  useEffect(() => {
+    if (props.titleIsSet === false) {
+      let titleAds = `${props.vehicle.brand} ${props.vehicle.carModel} ${props.vehicle.motor}`;
+      props.setVehicle({
+        ...props.vehicle,
+        title: titleAds,
+      });
+      props.setTitleIsSet(true);
+    }
+  }, []);
 
   // Handler
 
@@ -128,7 +128,7 @@ export default function FileUploader(props) {
   return (
     <div className={`slideAnimation ${classes.galery}`}>
       <div className={classes.uploaderCard}>
-        <h3>Image de l'annonce</h3>
+        <h3>Image principale</h3>
         <div>
           {props.thumbnailImage.length > 0 && (
             <img
@@ -147,7 +147,7 @@ export default function FileUploader(props) {
         <label htmlFor="thumbnail">Choisissez un fichier</label>
       </div>
       <div className={classes.uploaderCard}>
-        <h3>Galerie</h3>
+        <h3>Photos complémentaires</h3>
         <p>Images téléchargées : {props.uploadedImages.length} / 6</p>
 
         <div className={classes.imageGallery}>

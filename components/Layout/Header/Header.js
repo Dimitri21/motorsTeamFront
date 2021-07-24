@@ -12,30 +12,50 @@ export default function Header(params) {
     router.push("/login");
   };
 
-  const val = useContext(AuthContext)
+  const logoutButtonClickHandler = () => {
+    auth.logout();
+    router.push('/')
+  };
+
+  const auth = useContext(AuthContext);
 
   return (
-      <AppBar position="fixed" className={styles.header}>
-        <Toolbar>
-            <div className={styles.logo}>
-              <Link href="/">MotorsTeam</Link>
-            </div>
+    <AppBar position="fixed" className={styles.header}>
+      <Toolbar>
+        <div className={styles.logo}>
+          <Link href="/">MotorsTeam</Link>
+        </div>
 
-            <div className={styles.navLink}>
-              <div>
-                <Link href="/vehicles/add">Ajouter un véhicule</Link>
-                <Link href="/vehicles/search">Rechercher</Link>
-                <Link href="/register">S'inscrire</Link>
-              </div>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={loginButtonClickHandler}
-              >
-                Se connecter
-              </Button>
+        <div className={styles.navLink}>
+          {auth.isLoggedIn && (
+            <div>
+              <Link href="/vehicles/add">Ajouter un véhicule</Link>
+              <Link href="/vehicles/search">Rechercher</Link>
+              <Link href="/register">S'inscrire</Link>
             </div>
-        </Toolbar>
-      </AppBar>
+          )}
+
+          {auth.isLoggedIn || (
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={loginButtonClickHandler}
+            >
+              Connexion
+            </Button>
+          )}
+
+          {auth.isLoggedIn && (
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={logoutButtonClickHandler}
+            >
+              Déconnexion
+            </Button>
+          )}
+        </div>
+      </Toolbar>
+    </AppBar>
   );
 }
